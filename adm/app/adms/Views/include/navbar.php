@@ -32,7 +32,7 @@
             </div> -->
 
             <div class="avatar">
-                <img src="<?= 'http://192.168.30.15/estudo/carlos/MVC/adm/app/adms/Views/images/users/' . $_SESSION['user_image'] ?>" width="40"><br>
+                <img src="<?= URL . 'adm/app/adms/Views/images/users/' . $_SESSION['user_image'] ?>" width="40"><br>
                 <div class="dropdown-menu setting">
                     <a href="<?= URLADM?>user-profile/index" class="item">
                         <span class="fa-solid fa-user"></span> Perfil

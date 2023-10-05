@@ -20,7 +20,7 @@ class CarregarPgAdm
 
     private string $controllerOriginal;
 
-    private array $sessionPermi;
+    private array $sessionPermi = [];
 
     private array $listPgPublic;
     private array $listPgPrivate;
@@ -87,7 +87,7 @@ class CarregarPgAdm
         }
 
         // classes de querys usadas no model
-        $querys = ['select' => new \App\adms\Models\helper\AdmsSelect() , 'delete' => new \App\adms\Models\helper\AdmsDelete() , 'create' => new \App\adms\Models\helper\AdmsCreate(), 'update' => new \App\adms\Models\helper\AdmsUpdate()];
+        $querys = ['select' => new \App\adms\Models\helper\AdmsSelect() , 'delete' => new \App\adms\Models\helper\AdmsDelete() , 'create' => new \App\adms\Models\helper\AdmsCreate(), 'update' => new \App\adms\Models\helper\AdmsUpdate(), 'constructJson' => new \App\adms\Models\helper\ConstructJson()];
 
         $model = new $model($querys);
 
@@ -95,15 +95,19 @@ class CarregarPgAdm
 
         $sessionPermi = '';
 
-        if($this->urlController != "Login") $sessionPermi = $checkPermissions->valPermissions($_SESSION['user_id']);
+        if($this->urlController != "Login"){
 
-        $activeMenus = $checkPermissions->valPermissions($_SESSION['user_id'], true);
+            $sessionPermi = $checkPermissions->valPermissions($_SESSION['user_id']);
 
-        $this->sessionPermi = array_merge($sessionPermi, $activeMenus);
+            $activeMenus = $checkPermissions->valPermissions($_SESSION['user_id'], true);
 
-        self::checkMenusPermi($querys);
+            $sessionPermi = array_merge($sessionPermi, $activeMenus);
 
-        $classLoad = new $this->classLoad($model, $this->sessionPermi);
+            self::checkMenusPermi($querys, $activeMenus);
+
+        }
+
+        $classLoad = new $this->classLoad($model, $sessionPermi);
 
         if (method_exists($classLoad, $this->urlMetodo)) {
             $classLoad->{$this->urlMetodo}($this->urlParameter);
@@ -114,20 +118,35 @@ class CarregarPgAdm
 
     }
 
-    private function checkMenusPermi($querys)
+    private function checkMenusPermi($querys, $activeMenus)
     {
-
         $querys['select']->exeSelect("cn_menus", '', 'ORDER BY orderby', '');
 
         $menus = $querys['select']->getResult();
 
+        $linksMenus = [];
+
         foreach($menus as $menu){
 
-            if(isset($menu['link']) == $this->controllerOriginal){
+            array_push($linksMenus, $menu['link']);
 
-                echo '<pre>';
-                print_r('asdasd');
-                echo '</pre>'; exit;
+        }
+
+        $linksMenusActive = [];
+
+        foreach(array_keys($activeMenus) as $menu){
+
+            $te = explode("m_", $menu);
+
+            array_push($linksMenusActive, $te[1]);
+
+        }
+
+        if(in_array($this->controllerOriginal, $linksMenus)){
+
+            if(!in_array($this->controllerOriginal, $linksMenusActive)){
+
+                die('nao tem acesso a esse menu');
 
             }
 
@@ -157,10 +176,11 @@ class CarregarPgAdm
      */
     private function pgPrivate():void
     {
-        $this->listPgPrivate = ["Dashboard", "ListUsers", "ViewUser", "AddUser", "EditUser", "UserProfile", "ViewPageHome", "EditHomeTop", "EditHomePrem", "EditHomeServ", "ViewAbout", "EditAbout", "AddAbout", "EditContact", "ViewMessage"];
+        $this->listPgPrivate = ["Dashboard", "ListUsers", "ViewUser", "AddUser", "EditUser", "UserProfile", "ViewPageHome", "EditHomeTop", "EditHomePrem", "EditHomeServ", "ViewAbout", "EditAbout", "AddAbout", "EditContact", "ViewMessage", "Teste"];
         if(in_array($this->urlController, $this->listPgPrivate)){
             $this->verifyLogin();
         }else{
+
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Página não encontrada!</p>";
             $urlRedirect = URLADM . "login/index";
             header("Location: $urlRedirect");

@@ -23,32 +23,7 @@ class AddUserModel
     {
         $this->data = $data;
 
-        $permissions_menus = '';
-
-        $permissions_users = '';
-
-        foreach(array_keys($this->data) as $key => $value){
-
-            if(strpos($value, 'u_') === 0){
-
-                unset($this->data[$value]);
-
-                $permissions_users .= '"' . $value . '":"' . "Ativo" . '",';
-
-            }
-
-            if(strpos($value, 'm_') === 0){
-
-                unset($this->data[$value]);
-
-                $permissions_menus .= '"' . $value . '":"' . "Ativo" . '",';
-
-            }
-        }
-
-        $this->data['permissions_users'] = self::constructJson($permissions_users);
-
-        $this->data['permissions_menus'] = self::constructJson($permissions_menus);
+        $this->data = $this->query['constructJson']->construct($this->data);
 
         $valField = new \App\adms\Models\helper\AdmsValField(); // pega o helper para a verificacaop do campos via php
 
@@ -131,16 +106,4 @@ class AddUserModel
 
     }
 
-    private function constructJson($string)
-    {
-
-        $string = rtrim($string, ',');
-
-        $string = substr_replace($string, '{', 0,0);
-
-        $qt = strlen($string);
-
-        return substr_replace($string, '}', $qt, 0);
-
-    }
 }

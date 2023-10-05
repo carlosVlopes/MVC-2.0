@@ -23,6 +23,8 @@ class NewUserModel
     {
         $this->data = $data;
 
+        $this->data = $this->query['constructJson']->construct($this->data);
+
         $valField = new \App\adms\Models\helper\AdmsValField(); // pega o helper para a verificacaop do campos via php
 
         $valField->valField($this->data); // chama o metodo do objeto
@@ -31,6 +33,12 @@ class NewUserModel
             $_SESSION['msg'] = "<p class='alert-danger'>O campo Confirme a senha deve ser igual ao campo senha!</p>";
             $this->result = false;
         }else{
+
+            $this->data['date_expiry'] = date("Y-m-d H:i:s", strtotime("+1 days"));
+
+            echo '<pre>';
+            print_r($this->data['date_expiry']);
+            echo '</pre>'; exit;
 
             unset($this->data['r_password']);
 
@@ -54,9 +62,9 @@ class NewUserModel
 
                         $this->data['created'] = date("Y-m-d H:i:s");
 
-                        $this->query->['create']->exeCreate("adms_users", $this->data);
+                        $this->query['create']->exeCreate("adms_users", $this->data);
 
-                        if( $this->query->['create']->getResult()){
+                        if( $this->query['create']->getResult()){
                             $_SESSION['msg'] = "<p class='alert-success'>Usuário cadastrado com sucesso!</p>";
                             $this->result = true;
                         }else{
@@ -79,9 +87,9 @@ class NewUserModel
 
     private function vfEmailUser($email) :bool
     {
-        $this->query->['select']->exeSelect("adms_users", 'email,user',"WHERE email = :email OR user =:user" , "email={$email}&user={$email}");
+        $this->query['select']->exeSelect("adms_users", 'email,user',"WHERE email = :email OR user =:user" , "email={$email}&user={$email}");
 
-        if($this->query->['select']->getResult()){
+        if($this->query['select']->getResult()){
             return false;
         }
 

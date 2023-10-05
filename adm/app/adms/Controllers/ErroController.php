@@ -12,12 +12,6 @@ class ErroController
     /** @var array|string|null $data Recebe os dados que devem ser enviados para VIEW */
     private array|string|null $data;
 
-    public function __construct($model){
-
-        $this->model = $model;
-
-    }
-
     /**
      * Instantiar a classe responsável em carregar a View e enviar os dados para View.
      * 

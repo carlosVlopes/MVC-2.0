@@ -5,7 +5,6 @@ namespace App\adms\Models\helper;
 class AdmsValPermissions
 {
 
-
     public function valPermissions($id, $getMenus = false)
     {
         $select = new \App\adms\Models\helper\AdmsSelect();
@@ -20,7 +19,11 @@ class AdmsValPermissions
 
         $permissions = json_decode($permissions_json[0][$camp]);
 
-        return get_object_vars($permissions);
+        if(gettype($permissions) == 'object'){
+
+            return get_object_vars($permissions);
+
+        }
 
     }
 }

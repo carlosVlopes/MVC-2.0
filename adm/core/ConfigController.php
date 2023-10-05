@@ -46,15 +46,16 @@ class ConfigController extends Config
         $slug = new AdmsSlug();
 
         $this->configAdm();
+
         if (!empty(filter_input(INPUT_GET, 'url', FILTER_DEFAULT))) {
+
             $this->url = filter_input(INPUT_GET, 'url', FILTER_DEFAULT);
-            //var_dump($this->url);
+
             $this->clearUrl();
+
             $this->urlArray = explode("/", $this->url);
 
             $this->controllerOriginal = $this->urlArray[0];
-
-            //var_dump($this->urlArray);
 
             if (isset($this->urlArray[0])) {
                 $this->urlController = $slug->slugController($this->urlArray[0]);
@@ -75,12 +76,11 @@ class ConfigController extends Config
             }
         } else {
             $this->urlController = $slug->slugController(CONTROLLERERRO);
+
             $this->urlMetodo = $slug->slugMetodo(METODO);
+
             $this->urlParameter = "";
         }
-        // echo "Controller: {$this->urlController} <br>";
-        // echo "Metodo: {$this->urlMetodo} <br>";
-        // echo "Paramentro: {$this->urlParameter} <br>";
     }
 
     /**
@@ -110,14 +110,7 @@ class ConfigController extends Config
      */
     public function loadPage(): void
     {
-        //echo "Carregar Pagina: {$this->urlController}<br>";
-
-        //$this->urlController = ucwords($this->urlController);
-        //echo "Carregar Pagina corrigida: {$this->urlController}<br>";
-
-        //$this->classLoad = "\\App\\adms\\Controllers\\" . $this->urlController;
-        //$classePage = new $this->classLoad();
-        //$classePage->{$this->urlMetodo}();
+        if($this->urlController == 'Login') $this->controllerOriginal = '';
 
         $loadPgAdm = new \Core\CarregarPgAdm();
         $loadPgAdm->loadPage($this->urlController, $this->urlMetodo, $this->urlParameter, $this->controllerOriginal);

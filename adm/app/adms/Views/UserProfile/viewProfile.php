@@ -5,7 +5,7 @@
 
 	extract($this->data['user'][0]);
 
-	$image = ($image !='') ? 'app/adms/Views/images/users/' . $image : '';
+	$image = ($image !='') ? 'adm/app/adms/Views/images/users/' . $image : '';
 
 	if($this->data){
 		$values = true;
@@ -38,7 +38,7 @@
 				<div class="content-adm">
 	                <div class="view-det-adm">
 	                    <span class="view-adm-title">Foto: </span>
-	                    <span class="view-adm-info"><img src="<?= ($image) ? 'http://192.168.30.15/estudo/carlos/MVC/adm/' . $image : ''?>" style="width:90px;"></span>
+	                    <span class="view-adm-info"><img src="<?= ($image) ? URL . $image : ''?>" style="width:90px;"></span>
 	                </div>
 
 	                <div class="view-det-adm">

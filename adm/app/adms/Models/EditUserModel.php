@@ -32,32 +32,7 @@ class EditUserModel
     {
         $this->data = $data;
 
-        $permissions_menus = '';
-
-        $permissions_users = '';
-
-        foreach(array_keys($this->data) as $key => $value){
-
-            if(strpos($value, 'u_') === 0){
-
-                unset($this->data[$value]);
-
-                $permissions_users .= '"' . $value . '":"' . "Ativo" . '",';
-
-            }
-
-            if(strpos($value, 'm_') === 0){
-
-                unset($this->data[$value]);
-
-                $permissions_menus .= '"' . $value . '":"' . "Ativo" . '",';
-
-            }
-        }
-
-        $this->data['permissions_users'] = self::constructJson($permissions_users);
-
-        $this->data['permissions_menus'] = self::constructJson($permissions_menus);
+        $this->data = $this->query['constructJson']->construct($this->data);
 
         $this->id = $id;
 
@@ -70,6 +45,7 @@ class EditUserModel
         $erro = true;
 
         if(isset($image)){
+
             $upload = new \App\adms\Models\helper\AdmsUpload();
 
             $upload->upload($image, $id, "app/adms/Views/images/users/");
@@ -116,6 +92,9 @@ class EditUserModel
                         $this->query['update']->exeUpdate("adms_users", $this->data , "WHERE id=:id" , "id={$this->id}");
 
                         if($this->query['update']->getResult()){
+
+                            if($this->id == $_SESSION['user_id'] && isset($image)) $_SESSION['user_image'] = $noVal['image'];
+
                             $_SESSION['msg'] = "<p class='alert-success'>Usuário editado com sucesso!</p>";
                             $this->result = true;
                         }else{
@@ -228,19 +207,6 @@ class EditUserModel
         $menus = $this->query['select']->getResult();
 
         return $menus;
-
-    }
-
-    private function constructJson($string)
-    {
-
-        $string = rtrim($string, ',');
-
-        $string = substr_replace($string, '{', 0,0);
-
-        $qt = strlen($string);
-
-        return substr_replace($string, '}', $qt, 0);
 
     }
 }
