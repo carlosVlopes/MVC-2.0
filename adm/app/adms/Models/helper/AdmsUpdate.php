@@ -75,7 +75,9 @@ class AdmsUpdate extends AdmsConn
 
         $this->query = "UPDATE {$this->table} SET {$values} {$this->terms}";
 
-        // var_dump($this->query);
+        // echo '<pre>';
+        // print_r($this->q);
+        // echo '</pre>'; exit;
         $this->exeInstruction();
     }
 

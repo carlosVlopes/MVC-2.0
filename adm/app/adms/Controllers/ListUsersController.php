@@ -45,7 +45,7 @@ class ListUsersController
 
         $this->data['error'] = false;
 
-        if(!empty($this->dataForm['search_user'])){
+        if(!empty($this->dataForm['search_name'])){
 
             $this->model->searchUser($this->dataForm);
 

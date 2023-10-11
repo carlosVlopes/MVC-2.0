@@ -47,6 +47,11 @@ class AdmsPagination extends AdmsConn
         return $this->resultBd;
     }
 
+    public function getTotalPages()
+    {
+        return $this->totalPages;
+    }
+
     public function __construct(string $link, string $table, string|null $var = null)
     {
         $this->link = $link;

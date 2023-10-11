@@ -64,9 +64,7 @@ class ListUsersModel
 
     public function searchUser($data)
     {
-        unset($data['search_user']);
-
-        $this->query['select']->exeSelect("adms_users", 'id,name,email,date_expiry',"WHERE name = :name OR email = :email" , "name={$data['search_name']}&email={$data['search_email']}");
+        $this->query['select']->exeSelect("adms_users", 'id,name,email,date_expiry',"WHERE name = :name OR email = :email" , "name={$data['search_name']}&email={$data['search_name']}");
 
         $this->result = false;
 

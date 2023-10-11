@@ -1,50 +1,67 @@
-<!-- Inicio Navbar -->
-    <nav class="navbar">
-        <div class="navbar-content">
-            <div class="bars">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-            <img src="<?=URLADM?>app/adms/assets/images/logo/v.jpg" alt="Celke" class="logo">
-        </div>
+<?php
 
-        <div class="navbar-content">
-            <!-- <div class="notification">
-                <i class="fa-solid fa-bell"></i>
-                <span class="number">7</span>
-                <div class="dropdown-menu">
-                    <div class="dropdown-content">
-                        <li>
-                            <?php if($_SESSION['user_image']): ?>
-                                <img src="<?= 'http://192.168.30.15/estudo/carlos/MVC/adm/app/adms/Views/images/users/' . $_SESSION['user_image'] ?>" width="40"><br>
-                            <?php endif ?>
-                            <div class="text">
-                                Fusce ut leo pretium, luctus elit id, vulputate lectus.
-                            </div>
-                        </li>
-                        <li>
-                            <img src="images/users/user.jpg" alt="Usuario" width="40">
-                            <div class="text">
-                                Fusce ut leo pretium, luctus elit id, vulputate lectus.
-                            </div>
-                        </li>
+    use Core\ConfigView;
+
+    $menus = ConfigView::configMenus();
+
+    $sidebarActive = '';
+
+    if(isset($this->data['sidebarActive'])){
+        $sidebarActive = $this->data['sidebarActive'];
+    }
+
+?>
+
+
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element"> <span>
+                            <img src="<?=URLADM?>app/adms/assets/img/logo/icon-d.png" class="img-circle" alt="Celke" class="logo">
+                             </span>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><?=$_SESSION['user_name']?></strong>
+                             </span> <span class="text-muted text-xs block">Opções <b class="caret"></b></span> </span> </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="<?= URLADM?>user-profile/index">Perfil</a></li>
+                        <li><a href="<?= URLADM?>edit-user/index/<?=$_SESSION['user_id']?>">Configuração</a></li>
+                        <li><a href="<?= URLADM?>user-token/index">Token API</a></li>
+                        <li class="divider"></li>
+                        <li><a href="<?= URLADM?>logout/index">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    IN+
+                </div>
+            </li>
+            <?php foreach($menus as $menu): ?>
+                <li class="<?= ($sidebarActive === $menu['link']) ? 'active' : ''?>">
+                    <a href="<?= URLADM . $menu['link']?>/index"><i class="fa <?=$menu['icon']?>"></i> <span class="nav-label"><?=$menu['title']?></span></a>
+                </li>
+            <?php endForeach ?>
+        </ul>
+
+    </div>
+</nav>
+<div id="page-wrapper" class="gray-bg">
+    <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                <form role="search" class="navbar-form-custom" action="http://webapplayers.com/inspinia_admin-v2.3/search_results.html">
+                    <div class="form-group">
+                        <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
                     </div>
-                </div>
-            </div> -->
-
-            <div class="avatar">
-                <img src="<?= URL . 'adm/app/adms/Views/images/users/' . $_SESSION['user_image'] ?>" width="40"><br>
-                <div class="dropdown-menu setting">
-                    <a href="<?= URLADM?>user-profile/index" class="item">
-                        <span class="fa-solid fa-user"></span> Perfil
-                    </a>
-                    <a href="<?= URLADM?>edit-user/index/<?=$_SESSION['user_id']?>" class="item">
-                        <span class="fa-solid fa-gear"></span> Configuração
-                    </a>
-                    <a href="<?= URLADM?>logout/index" class="item">
-                        <span class="fa-solid fa-arrow-right-from-bracket"></span> Sair
-                    </a>
-                </div>
+                </form>
             </div>
-        </div>
-    </nav>
-    <!-- Fim Navbar -->
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <a href="login.html">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+    </div>

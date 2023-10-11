@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Celke - Administrativo</title>
-        <link rel="stylesheet" href="<?= URLADM ?>app/adms/assets/css/custom_login.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    </head>
-    <body  class="d-flex">
+
+
+<!-- Mirrored from webapplayers.com/inspinia_admin-v2.3/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Sep 2015 13:12:22 GMT -->
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>INSPINIA | Login</title>
+
+    <link href="<?=URLADM?>app/adms/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?=URLADM?>app/adms/assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="<?=URLADM?>app/adms/assets/css/animate.css" rel="stylesheet">
+    <link href="<?=URLADM?>app/adms/assets/css/style.css" rel="stylesheet">
+
+</head>

@@ -1,51 +1,29 @@
-<?php
-if (isset($this->data['form'])) {
-    $valorForm = $this->data['form'];
-}
+<body class="gray-bg">
 
-//Criptografar a senha
-//echo password_hash("123456a", PASSWORD_DEFAULT);
-?>
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div>
 
-<div class="container-login">
-    <div class="wrapper-login">
-        <div class="title">
-            <span>Área Restrita</span>
-        </div>
-        <?php
-        if(isset($_SESSION['msg'])){
-            echo $_SESSION['msg'];
-            unset($_SESSION['msg']);
-        }
-        ?>
-        <span id="msg"></span>
+                <h1 class="logo-name">AV+</h1>
 
-        <form method="POST" action="" id="form-login" class="form-login">
+            </div>
+            <h3>Bem vindo ao AV+</h3>
+
+            <p>Login do painel administrativo.</p>
             <?php
-                $user = "";
-                if (isset($valorForm['user'])) {
-                    $user = $valorForm['user'];
-                }
-                $password = "";
-                if (isset($valorForm['password'])) {
-                    $password = $valorForm['password'];
+                if(isset($_SESSION['msg'])){
+                    echo $_SESSION['msg'];
+                    unset($_SESSION['msg']);
                 }
             ?>
-            <div class="row">
-                <i class="fa-solid fa-user"></i>
-                <input type="text" name="user" id="user" placeholder="Digite o usuário" value="<?= $user ?>"><br><br>
-            </div>
-            <div class="row">
-                <i class="fa-solid fa-lock"></i>
-                <input type="password" name="password" id="password" placeholder="Digite a senha" value="<?= $password ?>"><br><br>
-            </div>
-            <div class="row button">
-                <input type="submit" name="SendLogin" value="Acessar">
-            </div>
-
-            <div class="signup-link">
-                <a href="<?= URLADM ?>new-user/index">Cadastrar</a>
-            </div>
-        </form>
+            <form class="m-t" role="form" action="" id="form-login" class="form-login" method="POST">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="user" placeholder="Usuario" required="" value="<?php (isset($this->data['form']['user'])) ? $this->data['form']['user'] : '' ?>">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" name="password" placeholder="Password" required="" value="<?php (isset($this->data['form']['password'])) ? $this->data['form']['password'] : '' ?>">
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b" name="SendLogin" value="Acessar">Login</button>
+            </form>
+        </div>
     </div>
-</div>

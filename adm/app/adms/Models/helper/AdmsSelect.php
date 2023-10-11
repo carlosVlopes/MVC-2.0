@@ -36,12 +36,12 @@ class AdmsSelect extends AdmsConn
             $this->select = "SELECT * FROM {$table} {$terms}";
         }
 
-        $this->exeInstruction();
+        $this->exeInstruction($values);
 
     }
 
 
-    private function exeInstruction():void
+    private function exeInstruction($values):void
     {
         $this->connection();
 
@@ -51,6 +51,7 @@ class AdmsSelect extends AdmsConn
             $this->query->execute();
 
             $this->result = $this->query->fetchAll();
+
         }catch(PDOException $err){
             $this->result = null;
         }

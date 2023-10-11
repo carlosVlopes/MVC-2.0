@@ -95,7 +95,7 @@ class CarregarPgAdm
 
         $sessionPermi = '';
 
-        if($this->urlController != "Login"){
+        if($this->urlController != "Login" && $this->urlController != "Api"){
 
             $sessionPermi = $checkPermissions->valPermissions($_SESSION['user_id']);
 
@@ -111,6 +111,15 @@ class CarregarPgAdm
 
         if (method_exists($classLoad, $this->urlMetodo)) {
             $classLoad->{$this->urlMetodo}($this->urlParameter);
+
+            if($this->urlController == "Api"){
+
+                $result = $classLoad->{$this->urlMetodo}($this->urlParameter);
+
+                echo json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+            }
+
         } else {
             die("Erro - 004: Por favor tente novamente. Caso o problema persista, entre em contato o administrador " . EMAILADM);
         }
@@ -161,7 +170,7 @@ class CarregarPgAdm
      */
     private function pgPublic(): void
     {
-        $this->listPgPublic = ["Login", "Erro", "Logout", "NewUser", "RecoverPassword"];
+        $this->listPgPublic = ["Login", "Erro", "Logout", "NewUser", "RecoverPassword", "Api"];
 
         if (in_array($this->urlController, $this->listPgPublic)) {
             $this->classLoad = "\\App\\adms\\Controllers\\" . $this->urlController . 'Controller';
@@ -176,7 +185,7 @@ class CarregarPgAdm
      */
     private function pgPrivate():void
     {
-        $this->listPgPrivate = ["Dashboard", "ListUsers", "ViewUser", "AddUser", "EditUser", "UserProfile", "ViewPageHome", "EditHomeTop", "EditHomePrem", "EditHomeServ", "ViewAbout", "EditAbout", "AddAbout", "EditContact", "ViewMessage", "Teste"];
+        $this->listPgPrivate = ["Dashboard", "ListUsers", "ViewUser", "AddUser", "EditUser", "UserProfile", "ViewPageHome", "EditHomeTop", "EditHomePrem", "EditHomeServ", "ViewAbout", "EditAbout", "AddAbout", "EditContact", "ViewMessage", "Teste", "UserToken"];
         if(in_array($this->urlController, $this->listPgPrivate)){
             $this->verifyLogin();
         }else{
