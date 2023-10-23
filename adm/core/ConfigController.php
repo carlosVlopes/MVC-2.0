@@ -2,7 +2,7 @@
 
 namespace Core;
 
-use \App\adms\Models\helper\AdmsSlug;
+use Core\helper\AdmsSlug;
 
 /**
  * Recebe a URL e manipula
@@ -37,13 +37,15 @@ class ConfigController extends Config
 
     private string $controllerOriginal;
 
+    private array $methodAjax = [];
+
     /**
      * Recebe a URL do .htaccess
      * Validar a URL
      */
     public function __construct()
     {
-        $slug = new AdmsSlug();
+        $slug = new helper\Slug();
 
         $this->configAdm();
 
@@ -54,6 +56,14 @@ class ConfigController extends Config
             $this->clearUrl();
 
             $this->urlArray = explode("/", $this->url);
+
+            $this->methodAjax['status'] = false;
+
+            if(self::isAjax()){
+                $this->methodAjax['method'] = end($this->urlArray);
+
+                 $this->methodAjax['status'] = true;
+            }
 
             $this->controllerOriginal = $this->urlArray[0];
 
@@ -75,11 +85,15 @@ class ConfigController extends Config
                 $this->urlParameter = "";
             }
         } else {
+
+            $this->controllerOriginal = '';
+
             $this->urlController = $slug->slugController(CONTROLLERERRO);
 
             $this->urlMetodo = $slug->slugMetodo(METODO);
 
             $this->urlParameter = "";
+
         }
     }
 
@@ -113,6 +127,10 @@ class ConfigController extends Config
         if($this->urlController == 'Login') $this->controllerOriginal = '';
 
         $loadPgAdm = new \Core\CarregarPgAdm();
-        $loadPgAdm->loadPage($this->urlController, $this->urlMetodo, $this->urlParameter, $this->controllerOriginal);
+        $loadPgAdm->loadPage($this->urlController, $this->urlMetodo, $this->urlParameter, $this->controllerOriginal, $this->methodAjax);
+    }
+
+    private function isAjax(){
+        return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
     }
 }

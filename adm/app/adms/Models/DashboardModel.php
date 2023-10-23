@@ -2,6 +2,8 @@
 
 namespace App\adms\Models;
 
+use Core\helper\Pagination;
+
 class DashboardModel
 {
     private array|null $data;
@@ -21,7 +23,7 @@ class DashboardModel
 
     public function getUsers()
     {
-        $getUsers = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-users/index', "adms_users");
+        $getUsers = new Pagination(URLADM . 'list-users/index', "adms_users");
 
         $getUsers->pagination(false);
 

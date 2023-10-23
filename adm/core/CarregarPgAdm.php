@@ -20,6 +20,8 @@ class CarregarPgAdm
 
     private string $controllerOriginal;
 
+    private array $methodAjax;
+
     private array $sessionPermi = [];
 
     private array $listPgPublic;
@@ -33,12 +35,22 @@ class CarregarPgAdm
      * @param string $urlParamentro Recebe da URL o parâmetro
      */
 
-    public function loadPage(string|null $urlController, string|null $urlMetodo, string|null $urlParameter, string $controllerOriginal): void
+    public function loadPage(string|null $urlController, string|null $urlMetodo, string|null $urlParameter, string $controllerOriginal, array $methodAjax): void
     {
         $this->urlController = $urlController;
         $this->urlMetodo = $urlMetodo;
         $this->urlParameter = $urlParameter;
         $this->controllerOriginal = $controllerOriginal;
+        $this->methodAjax = $methodAjax;
+
+        if($this->urlController == "Logout"){
+
+            unset($_SESSION['user_id'], $_SESSION['user_name'], $_SESSION['user_nickname'], $_SESSION['user_email'], $_SESSION['user_image']);
+            $_SESSION['msg'] = "<p class='alert-success'>Logout realizado com sucesso!</p>";
+            $urlRedirect = URLADM . "login/index";
+            header("Location: $urlRedirect");
+
+        }
 
         $this->pgPublic();
 
@@ -51,11 +63,18 @@ class CarregarPgAdm
 
     private function loadClassSts(): void
     {
-        $this->classLoad = "\\App\\sts\\Controllers\\" . $this->urlController . 'Controller';
+        $this->classLoad = "\\App\\Site\\Controllers\\" . $this->urlController . 'Controller';
+
+        // echo '<pre>';
+        // print_r($this->classLoad);
+        // echo '</pre>'; exit;
 
         if (class_exists($this->classLoad)) {
+
             $this->loadMetodo(true);
+
         } else {
+
             die("Erro - 003: Por favor tente novamente. Caso o problema persista, entre em contato o administrador " . EMAILADM);
             /*$this->urlController = $this->slugController(CONTROLLER);
             $this->urlMetodo = $this->slugMetodo(METODO);
@@ -73,13 +92,13 @@ class CarregarPgAdm
     {
         ($sts) ? $model = '\\App\\sts\\Models\\' . $this->urlController . 'Model' : $model = '\\App\\adms\\Models\\' . $this->urlController . 'Model';
 
-        if($this->urlController == "Logout"){
+        if($this->urlController == 'Erro')
+        {
+            $controller = new \App\adms\Controllers\ErroController();
 
-            unset($_SESSION['user_id'], $_SESSION['user_name'], $_SESSION['user_nickname'], $_SESSION['user_email'], $_SESSION['user_image']);
-            $_SESSION['msg'] = "<p class='alert-success'>Logout realizado com sucesso!</p>";
-            $urlRedirect = URLADM . "login/index";
-            header("Location: $urlRedirect");
+            $controller->index();
 
+            exit;
         }
 
         if(!class_exists($model)){
@@ -87,11 +106,11 @@ class CarregarPgAdm
         }
 
         // classes de querys usadas no model
-        $querys = ['select' => new \App\adms\Models\helper\AdmsSelect() , 'delete' => new \App\adms\Models\helper\AdmsDelete() , 'create' => new \App\adms\Models\helper\AdmsCreate(), 'update' => new \App\adms\Models\helper\AdmsUpdate(), 'constructJson' => new \App\adms\Models\helper\ConstructJson()];
+        $querys = ['select' => new helper\Select() , 'delete' => new helper\Delete() , 'create' => new helper\Create(), 'update' => new helper\Update(), 'constructJson' => new helper\ConstructJson(), 'valPassword' => new helper\ValPassword(), 'valField' => new helper\ValField(), 'upload' => new helper\Upload(),'valPermissions' => new helper\ValPermissions()];
 
         $model = new $model($querys);
 
-        $checkPermissions = new \App\adms\Models\helper\AdmsValPermissions();
+        $checkPermissions = new helper\ValPermissions();
 
         $sessionPermi = '';
 
@@ -108,6 +127,12 @@ class CarregarPgAdm
         }
 
         $classLoad = new $this->classLoad($model, $sessionPermi);
+
+        if(!empty($this->methodAjax['status'])){
+
+            $classLoad->{$this->methodAjax['method']}();
+
+        }
 
         if (method_exists($classLoad, $this->urlMetodo)) {
             $classLoad->{$this->urlMetodo}($this->urlParameter);
@@ -170,7 +195,7 @@ class CarregarPgAdm
      */
     private function pgPublic(): void
     {
-        $this->listPgPublic = ["Login", "Erro", "Logout", "NewUser", "RecoverPassword", "Api"];
+        $this->listPgPublic = ["Login", "Erro", "Logout", "NewUser", "RecoverPassword", "Api", "Home"];
 
         if (in_array($this->urlController, $this->listPgPublic)) {
             $this->classLoad = "\\App\\adms\\Controllers\\" . $this->urlController . 'Controller';
@@ -185,13 +210,13 @@ class CarregarPgAdm
      */
     private function pgPrivate():void
     {
-        $this->listPgPrivate = ["Dashboard", "ListUsers", "ViewUser", "AddUser", "EditUser", "UserProfile", "ViewPageHome", "EditHomeTop", "EditHomePrem", "EditHomeServ", "ViewAbout", "EditAbout", "AddAbout", "EditContact", "ViewMessage", "Teste", "UserToken"];
+        $this->listPgPrivate = ["Dashboard", "Usuarios", "ViewUser", "AddUser", "EditUser", "UserProfile", "UserToken", "Produtos", "ProdutosGaleria"];
         if(in_array($this->urlController, $this->listPgPrivate)){
             $this->verifyLogin();
         }else{
 
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Página não encontrada!</p>";
-            $urlRedirect = URLADM . "login/index";
+            $urlRedirect = URLADM . "erro/index";
             header("Location: $urlRedirect");
         }
     }

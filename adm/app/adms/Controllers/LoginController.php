@@ -35,20 +35,13 @@ class LoginController
 
             unset($this->dataForm['SendLogin']);
 
-            $this->model->login($this->dataForm);
-
-            if($this->model->getResult()){
+            if($this->model->login($this->dataForm)){
                 $urlRedirect = URLADM . "dashboard/index";
                 header("Location: $urlRedirect");
-            }else{
-                $this->data['form'] = $this->dataForm;
-            }            
+            }
         }
 
-        //$this->data = null;
-
-        $loadView = new \Core\ConfigView("adms/Views/login/login", $this->data);
-        $loadView->loadViewLogin();
+        require_once "app/adms/Views/login/login.php";
     }
 
 

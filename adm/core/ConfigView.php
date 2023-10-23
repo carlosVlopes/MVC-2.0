@@ -2,8 +2,8 @@
 
 namespace Core;
 
-use \App\adms\Models\helper\AdmsSelect;
-use \App\adms\Models\helper\AdmsValPermissions;
+use Core\helper\Select;
+use  Core\helper\ValPermissions;
 
 /**
  * Carregar as páginas da View
@@ -35,7 +35,7 @@ class ConfigView
             include 'app/adms/Views/include/navbar.php';
             // include 'app/adms/Views/include/menu.php';
             include 'app/' .$this->nameView . '.php';
-            include 'app/adms/Views/include/footer.php';
+            // include 'app/adms/Views/include/footer.php';
         }else{
             die("Erro - 002: Por favor tente novamente. Caso o problema persista, entre em contato o administrador " . EMAILADM);
         }
@@ -54,7 +54,7 @@ class ConfigView
 
     public static function configMenus()
     {
-        $checkPermissions = new AdmsValPermissions();
+        $checkPermissions = new ValPermissions();
 
         $permissions = $checkPermissions->valPermissions($_SESSION['user_id'], true);
 
@@ -79,7 +79,7 @@ class ConfigView
         $menusValues = rtrim($menusValues, '&');
         $menusWhere = rtrim($menusWhere, 'OR');
 
-        $select = new AdmsSelect();
+        $select = new Select();
 
         $select->exeSelect('cn_menus', "", "WHERE {$menusWhere} ORDER BY orderby", $menusValues);
 

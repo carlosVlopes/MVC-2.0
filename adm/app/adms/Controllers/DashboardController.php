@@ -25,7 +25,6 @@ class DashboardController
      */
     public function index():void
     {
-
         $this->model->getUsers();
 
         $this->data = $this->model->getResult();

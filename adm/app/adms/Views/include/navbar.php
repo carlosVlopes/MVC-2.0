@@ -18,7 +18,7 @@
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element"> <span>
-                            <img src="<?=URLADM?>app/adms/assets/img/logo/icon-d.png" class="img-circle" alt="Celke" class="logo">
+                            <img src="<?=URLADM?>app/adms/Views/images/users/<?=$_SESSION['user_image']?>" class="img-circle" alt="Celke" class="logo" width="60px">
                              </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><?=$_SESSION['user_name']?></strong>
@@ -57,7 +57,7 @@
             </div>
             <ul class="nav navbar-top-links navbar-right">
                 <li>
-                    <a href="login.html">
+                    <a href="<?= URLADM?>logout/index">
                         <i class="fa fa-sign-out"></i> Log out
                     </a>
                 </li>

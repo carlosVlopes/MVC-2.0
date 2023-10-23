@@ -2,7 +2,7 @@
 
 namespace App\adms\Controllers;
 
-use \App\adms\Models\helper\AdmsPagination;
+use Core\helper\Pagination;
 /**
  * Controller da página novo usuário
  * @author Cesar <cesar@celke.com.br>
@@ -65,7 +65,7 @@ class ApiController
 
         $limitResult = 2;
 
-        $pagination = new AdmsPagination(URL . '/admin/testimonies', 'adms_users');
+        $pagination = new Pagination(URL . '/admin/testimonies', 'adms_users');
 
         $pagination->condition($numPage, $limitResult);
 

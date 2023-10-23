@@ -9,7 +9,6 @@
     </div>
 
 </div> -->
-
 <div class="col-lg-2">
     <div class="widget style1 navy-bg">
         <div class="row vertical-align">
@@ -17,7 +16,7 @@
                 <i class="fa fa-user fa-3x"></i>
             </div>
             <div class="col-9 text-right">
-                <h2 class="font-bold">217</h2>
+                <h2 class="font-bold"><?=$this->data[0]['num_result']?></h2>
             </div>
         </div>
     </div>

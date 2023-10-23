@@ -28,6 +28,8 @@ abstract class Config
         define('METODO', 'index');
         define('CONTROLLERERRO', 'Login');
 
+        define('CONTROLLERSITE', 'Home');
+
         define('HOST', '192.168.30.15');
         define('USER', 'carlos');
         define('PASS', 'Ac4rl0s??ss10n');
